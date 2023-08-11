@@ -3,9 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
     <title>Odin JavaScript | Tic Tac Toe</title>
 </head>
 <body>
-    
+    <main>
+        <div class="board-container">
+            <div class="row" data-row="0">
+                <div data-col="0" class="box dark"><div class="symbol"></div></div>
+                <div data-col="1" class="box light"><div class="symbol"></div></div>
+                <div data-col="2" class="box dark"><div class="symbol"></div></div>
+            </div>
+            <div class="row" data-row="1">
+                <div data-col="0" class="box light"><div class="symbol"></div></div>
+                <div data-col="1" class="box dark"><div class="symbol"></div></div>
+                <div data-col="2" class="box light"><div class="symbol"></div></div>
+            </div>
+            <div class="row" data-row="2">
+                <div data-col="0" class="box dark"><div class="symbol"></div></div>
+                <div data-col="1" class="box light"><div class="symbol"></div></div>
+                <div data-col="2" class="box dark"><div class="symbol"></div></div>
+            </div>
+        </div>
+    </main>
+    <script src="script.js"></script>
 </body>
 </html>
