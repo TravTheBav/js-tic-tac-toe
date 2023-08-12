@@ -14,7 +14,56 @@ const gameBoard = (() => {
     const updatePos = (row, col, symbol) => {
         board[row][col] = symbol;
     }
-    return { board, updatePos }
+
+    const threeInARow = function () {
+        if (_completeRow() || _completeCol() || _completeDiagonal()) {
+            return true;
+        }   else  {
+            return false;
+        }
+    }
+
+    const _completeRow = function () {
+        for (let i = 0; i < board.length; i++) {
+            if (_allEqual(board[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    const _completeCol = function () {
+        cols = [[], [], []];
+        for (let i = 0; i < board.length; i++) {
+            for (let j = 0; j < board.length; j++) {
+                cols[j].push(board[i][j]);
+            }
+        }
+
+        for (let i = 0; i < 3; i++) {
+            if (_allEqual(cols[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    const _completeDiagonal = function () {
+        diagOne = [board[0][0], board[1][1], board[2][2]];
+        diagTwo = [board[2][0], board[1][1], board[0][2]];
+
+        if (_allEqual(diagOne) || _allEqual(diagTwo)) {
+            return true;
+        }   else  {
+            return false;
+        }
+    }
+
+    const _allEqual = (arr) => {
+        return arr.every(ele => ele === arr[0] && ele != null);
+    }
+
+    return { board, updatePos, threeInARow }
 })();
 
 // module pattern
@@ -60,24 +109,29 @@ const Game = (function () {
     const playerTwo = playerFactory(prompt('Enter player 2 name: '), 'O');
     let currentPlayer = playerOne;
 
+    const getCurrentSymbol = function () {
+        return currentPlayer.symbol;
+    }
+
     const playerClick = function () {
         if (!gameOver) {
             displayController.renderBoard();
+            if (gameBoard.threeInARow()) {
+                gameOver = true;
+                setTimeout(() => {
+                    window.alert(`${currentPlayer.name} wins this round`)
+                }, 100);
+            }
             _toggleCurrentPlayer();
         }
     }
 
     const _toggleCurrentPlayer = function () {
-        console.log(currentPlayer);
         if (currentPlayer == playerOne) {
             currentPlayer = playerTwo;
         }   else  {
             currentPlayer = playerOne;
         }
-    }
-
-    const getCurrentSymbol = function () {
-        return currentPlayer.symbol;
     }
 
     return { getCurrentSymbol, playerClick }    
