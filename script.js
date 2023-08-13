@@ -121,8 +121,9 @@ const Game = (function () {
                 setTimeout(() => {
                     window.alert(`${currentPlayer.name} wins this round`)
                 }, 100);
-            }
-            _toggleCurrentPlayer();
+            }  else  {
+                _toggleCurrentPlayer();
+            }            
         }
     }
 
