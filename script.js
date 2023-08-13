@@ -9,7 +9,15 @@ const gameBoard = (() => {
                 [null, null, null],
                 [null, null, null],
                 [null, null, null]
-                ]
+            ]
+
+    const newBoard = function () {
+        for (i = 0; i < board.length; i++) {
+            for (j = 0; j < board.length; j++) {
+                board[i][j] = null;
+            }
+        }
+    }
 
     const updatePos = (row, col, symbol) => {
         board[row][col] = symbol;
@@ -63,19 +71,32 @@ const gameBoard = (() => {
         return arr.every(ele => ele === arr[0] && ele != null);
     }
 
-    return { board, updatePos, threeInARow }
+    return { board, newBoard, updatePos, threeInARow }
 })();
 
 // module pattern
 const displayController = (() => {
     const setListeners = function () {
+        _boxListeners();
+        _resetListener();
+    }
+    
+    const _boxListeners = function () {
         for (let row = 0; row < gameBoard.board.length; row++) {
             for (let col = 0; col < gameBoard.board.length; col++) {
                 let box = _getDisplayBox(row, col);
-                    box.addEventListener('click', _boxClicked.bind(this, row, col), false);
+                box.addEventListener('click', _boxClicked.bind(this, row, col), false);
             }
         }
-    }    
+    }
+
+    const _resetListener = function () {
+        const reset = document.querySelector(".reset");
+        reset.addEventListener('click', e => {
+            Game.reset();
+            console.log('clicked');
+        });
+    }
 
     const renderBoard = function () {
         for (row = 0; row < gameBoard.board.length; row++) {
@@ -105,8 +126,8 @@ const displayController = (() => {
 // module pattern
 const Game = (function () {
     let gameOver = false;
-    const playerOne = playerFactory(prompt('Enter player 1 name: '), 'X');
-    const playerTwo = playerFactory(prompt('Enter player 2 name: '), 'O');
+    let playerOne = playerFactory(prompt('Enter player 1 name: '), 'X');
+    let playerTwo = playerFactory(prompt('Enter player 2 name: '), 'O');
     let currentPlayer = playerOne;
 
     const getCurrentSymbol = function () {
@@ -135,7 +156,14 @@ const Game = (function () {
         }
     }
 
-    return { getCurrentSymbol, playerClick }    
+    const reset = function () {
+        gameOver = false;
+        gameBoard.newBoard();
+        displayController.renderBoard();
+        currentPlayer = playerOne;
+    }
+
+    return { getCurrentSymbol, playerClick, reset }    
 })();
 
 displayController.setListeners();
